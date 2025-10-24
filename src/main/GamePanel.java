@@ -1,0 +1,36 @@
+package main;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class GamePanel extends JPanel implements Runnable {
+
+    //screen settings
+    final int originalTileSize = 16; //16x16 tiles
+    final int scale = 3;//making the tiles bigger for modern pixel counts
+
+    final int tileSize = originalTileSize * scale; // 48x48 tile
+    final int maxScreenCol = 16;
+    final int maxScreenRow = 12; // 4:3 window ratio
+    final int screenWidth = tileSize * maxScreenCol; //768 px
+    final int screenHeight = tileSize * maxScreenRow; //576 px
+
+    Thread gameThread; //can be started and stopped, useful for rerunning a set of actions.
+
+    public GamePanel() {
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        this.setBackground(Color.BLACK);
+        this.setDoubleBuffered(true);// can improve games rendering performance
+    }
+
+    public void startGameThread() {
+        gameThread = new Thread(this); //passing this gamePanel to the Thread constructor
+        gameThread.start(); // automatically calls run();
+    }
+
+    @Override
+    public void run() { // automatically run when Thread is called
+
+    }
+
+}
