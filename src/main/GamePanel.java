@@ -15,12 +15,15 @@ public class GamePanel extends JPanel implements Runnable {
     final int screenWidth = tileSize * maxScreenCol; //768 px
     final int screenHeight = tileSize * maxScreenRow; //576 px
 
+    KeyHandler keyH = new KeyHandler();
     Thread gameThread; //can be started and stopped, useful for rerunning a set of actions.
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);// can improve games rendering performance
+        this.addKeyListener(keyH);
+        this.setFocusable(true);// game panel can be focused to receive key input
     }
 
     public void startGameThread() {
