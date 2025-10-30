@@ -40,8 +40,34 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread.start(); // automatically calls run();
     }
 
+    // Sleep method for 60 FPS  -  some claim threadSleep isnt entirely accurate and can be a few milliseconds out
+    /*
     @Override
     public void run() { // automatically run when Thread is called
+
+        /*
+        First method for 60fps - sleep method
+        double drawInterval = 1000000000/FPS;
+        double nextDrawTime = System.nanoTime() + drawInterval;
+
+        Inside game loop:
+        try {
+                double remainingTime = nextDrawTime - System.nanoTime();// time in milliseconds
+                remainingTime = remainingTime/1000000; //covert to nanoseconds
+
+                if (remainingTime < 0) {// if the time taken to update is longer than the time interval
+                    remainingTime = 0;
+                }
+                Thread.sleep((long) remainingTime);
+                nextDrawTime += drawInterval;
+            }
+            catch (InterruptedException e) {
+                //auto generated
+                e.printStackTrace();
+            }
+         */ /*
+        double drawInterval = 1000000000/FPS; // 1 second / 60 fps = time interval for each frame
+        double nextDrawTime = System.nanoTime() + drawInterval;
 
         //Game Loop
         while (gameThread != null) {
@@ -54,6 +80,45 @@ public class GamePanel extends JPanel implements Runnable {
             update();
             // 2. DRAW: draw the screen with updated information
             repaint();
+
+            // first method for 60 fps - sleep method
+            try {
+                double remainingTime = nextDrawTime - System.nanoTime();// time in milliseconds
+                remainingTime = remainingTime/1000000; //covert to nanoseconds
+
+                if (remainingTime < 0) {// if the time taken to update is longer than the time interval
+                    remainingTime = 0;
+                }
+                Thread.sleep((long) remainingTime);
+                nextDrawTime += drawInterval;
+            }
+            catch (InterruptedException e) {
+                //auto generated
+                e.printStackTrace();
+            }
+        }
+    }
+    */
+    // Delta / Accumulator method for 60 FPS
+    @Override
+    public void run() {
+
+        double drawInterval = 1000000000/FPS;
+        double delta = 0;
+        long lastTime = System.nanoTime();
+        long currentTime;
+
+        while (gameThread != null) {
+
+            currentTime = System.nanoTime();
+            delta += (currentTime - lastTime) / drawInterval;
+            lastTime = currentTime;
+
+            if (delta > 1) {
+                update();
+                repaint();
+                delta--;
+            }
         }
     }
 
