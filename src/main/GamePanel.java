@@ -1,5 +1,7 @@
 package main;
 
+import entity.Player;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -21,6 +23,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread; //can be started and stopped, useful for rerunning a set of actions.
+    Player player = new Player(this, keyH);
 
     // Set players default position
     int playerX = 100;
