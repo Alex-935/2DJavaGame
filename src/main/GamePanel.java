@@ -11,7 +11,7 @@ public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16; //16x16 tiles
     final int scale = 3;//making the tiles bigger for modern pixel counts
 
-    final int tileSize = originalTileSize * scale; // 48x48 tile
+    public final int tileSize = originalTileSize * scale; // 48x48 tile
     final int maxScreenCol = 16;
     final int maxScreenRow = 12; // 4:3 window ratio
     final int screenWidth = tileSize * maxScreenCol; //768 px
@@ -19,7 +19,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     // FPS = 60
     int FPS = 60;
-
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread; //can be started and stopped, useful for rerunning a set of actions.
@@ -126,18 +125,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (keyH.upPressed == true) {
-            playerY -= playerSpeed;
-        }
-        else if (keyH.downPressed == true) {
-            playerY += playerSpeed;
-        }
-        else if (keyH.leftPressed == true) {
-            playerX -= playerSpeed;
-        }
-        else if (keyH.rightPressed) {
-            playerX += playerSpeed;
-        }
+        player.update();
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -145,8 +133,7 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g; //extends the Graphics class to provide more sophisticated control
                                         // over geometry, coordinate transformations, color management and text layout
 
-        g2.setColor(Color.white);
-        g2.fillRect(playerX, playerY, tileSize, tileSize);
+        player.draw(g2);
         g2.dispose();// dispose of graphics content and release system resources it is using.
     }
 
